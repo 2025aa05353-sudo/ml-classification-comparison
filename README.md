@@ -20,6 +20,9 @@ The project aims to:
 **Dataset Source:**  
 [Kaggle (UCI Machine Learning Repository)](https://www.kaggle.com/datasets/ruthgn/wine-quality-data-set-red-white-wine)
 
+**Streamlit.app Link:**  
+[Streamlit App](https://ml-classification-comparison-2025aa05353.streamlit.app/)
+
 **Dataset Type:**  
 Red and White Wine (combined)
 
