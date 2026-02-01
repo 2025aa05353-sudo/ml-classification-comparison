@@ -165,6 +165,7 @@ elif page == "Predict on New Data":
                     preds = model.predict(X_scaled)
 
                 df["quality"] = preds
+                df["type"] = df["type"].map({0: "red", 1: "white"})
 
                 st.success("Prediction Successful")
                 df_display = df.copy()
@@ -294,4 +295,5 @@ else:
     ], columns=["Metric", "Description", "Range"])
 
     metrics_info_df.index = range(1, len(metrics_info_df) + 1)
+
     st.table(metrics_info_df)
