@@ -187,7 +187,7 @@ elif page == "Predict on New Data":
                 
                 st.download_button(
                     "Download Predicted CSV",
-                    df.to_csv(index=False),
+                    df_display.to_csv(index=False),
                     file_name="predicted_wine_quality.csv",
                     mime="text/csv"
                 )
@@ -307,5 +307,6 @@ else:
     metrics_info_df.index = range(1, len(metrics_info_df) + 1)
 
     st.table(metrics_info_df)
+
 
 
