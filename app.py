@@ -156,26 +156,35 @@ elif page == "Predict on New Data":
             if list(df.columns) != EXPECTED_COLUMNS:
                 st.error("❌ Wrong file uploaded – Please use sample data to update the features for Prediction")
             else:
+                # ---- CLEAN & PRESERVE TYPE ----
                 df["type"] = df["type"].str.strip().str.lower()
-                df["type"] = df["type"].map({"red": 0, "white": 1})
-                X_scaled = scaler.transform(df)
+                df["type_num"] = df["type"].map({"red": 0, "white": 1})
 
+                # ---- PREPARE MODEL INPUT (DO NOT TOUCH DISPLAY DATA) ----
+                X = df.copy()
+                X["type"] = X["type_num"]
+                X = X[EXPECTED_COLUMNS]   # enforce correct column order
+
+                X_scaled = scaler.transform(X)
+
+                # ---- PREDICT ----
                 if model_name == "XGBoost":
                     preds = label_encoder.inverse_transform(model.predict(X_scaled))
                 else:
                     preds = model.predict(X_scaled)
 
+                # ---- ATTACH PREDICTIONS ----
                 df["quality"] = preds
-                df["type"] = df["type"].map({0: "red", 1: "white"})
+
+                # ---- FINAL DISPLAY DATAFRAME ----
+                df_display = df.drop(columns=["type_num"]).copy()
+
+                # Start index from 1
+                df_display.index = range(1, len(df_display) + 1)
 
                 st.success("Prediction Successful")
-                df_display = df.copy()
-                # Convert type back to red / white for display
-                df_display["type"] = df_display["type"].map({0: "red", 1: "white"})
-                # Start index from 1 for display
-                df_display.index = range(1, len(df_display) + 1)
                 st.dataframe(df_display.head())
-
+                
                 st.download_button(
                     "Download Predicted CSV",
                     df.to_csv(index=False),
@@ -298,4 +307,5 @@ else:
     metrics_info_df.index = range(1, len(metrics_info_df) + 1)
 
     st.table(metrics_info_df)
+
 
