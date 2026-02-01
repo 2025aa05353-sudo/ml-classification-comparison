@@ -156,6 +156,7 @@ elif page == "Predict on New Data":
             if list(df.columns) != EXPECTED_COLUMNS:
                 st.error("❌ Wrong file uploaded – Please use sample data to update the features for Prediction")
             else:
+                df["type"] = df["type"].str.strip().str.lower()
                 df["type"] = df["type"].map({"red": 0, "white": 1})
                 X_scaled = scaler.transform(df)
 
@@ -297,3 +298,4 @@ else:
     metrics_info_df.index = range(1, len(metrics_info_df) + 1)
 
     st.table(metrics_info_df)
+
